@@ -1,0 +1,1 @@
+https://www.intigriti.com/blog/news/idor-a-complete-guide-to-exploiting-advanced-idor-vulnerabilities#7-exploiting-idors-in-apis-that-use-static-keywords --IDOR: A complete guide to exploiting advanced IDOR vulnerabilities
