@@ -1,30 +1,95 @@
 package main
 
 import (
-	"io"
 	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 )
 
-func testIDOR(baseURL, endpoint string) string {
-	url1 := baseURL + endpoint + "/1"
-	url2 := baseURL + endpoint + "/2"
+func isIDParam(key string) bool {
+	key = strings.ToLower(key)
+	return strings.Contains(key, "id")
+}
 
-	r1, err1 := http.Get(url1)
-	r2, err2 := http.Get(url2)
+func testIDOR(fullURL string, id int, authToken string) string {
 
-	if err1 != nil || err2 != nil {
+	//println("[*] Testing IDOR on:", fullURL)
+
+	if id <= 0 {
+		return ""
+	}
+
+	u, err := url.Parse(fullURL)
+	if err != nil {
+		return ""
+	}
+
+	url1 := buildPathURL(u, id)
+	url2 := buildPathURL(u, id+1)
+
+	r1, err1 := makeRequest(url1, authToken)
+	if err1 != nil {
 		return ""
 	}
 	defer r1.Body.Close()
+
+	r2, err2 := makeRequest(url2, authToken)
+	if err2 != nil {
+		return ""
+	}
 	defer r2.Body.Close()
 
-	b1, _ := io.ReadAll(r1.Body)
-	b2, _ := io.ReadAll(r2.Body)
+	// println("Checking:", url1, "=> %T", r1.StatusCode)
+	// fmt.Printf("Type of r1.StatusCode: %T\n", r1.StatusCode)
 
-	if r1.StatusCode == 200 && r2.StatusCode == 200 && string(b1) != string(b2) {
-		return "Possible IDOR"
+	// println("Checking:", url2, "=> %T", r2.StatusCode)
+	// fmt.Printf("Type of r1.StatusCode: %T\n", r2.StatusCode)
+	// fmt.Printf("Condition: %v\n", r1.StatusCode == 200 && r2.StatusCode == 200)
+	if r1.StatusCode == 200 && r2.StatusCode == 200 {
+		return "Possible IDOR via path parameter"
 	}
+
 	return ""
+}
+
+func buildPathURL(u *url.URL, id int) string {
+	copyURL := *u
+	copyURL.RawQuery = ""
+
+	path := strings.Trim(copyURL.Path, "/")
+	if path == "" {
+		copyURL.Path = "/" + strconv.Itoa(id)
+		return copyURL.String()
+	}
+
+	segments := strings.Split(path, "/")
+	for i, seg := range segments {
+		if _, err := strconv.Atoi(seg); err == nil {
+			segments[i] = strconv.Itoa(id)
+			copyURL.Path = "/" + strings.Join(segments, "/")
+			return copyURL.String()
+		}
+	}
+
+	segments = append(segments, strconv.Itoa(id))
+	copyURL.Path = "/" + strings.Join(segments, "/")
+	return copyURL.String()
+}
+
+func makeRequest(requestURL string, authToken string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", requestURL, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	// Set Authorization header if token is provided
+	if authToken != "" {
+		req.Header.Set("Authorization", "Bearer "+authToken)
+	}
+
+	client := &http.Client{}
+	return client.Do(req)
 }
 
 func testAuth(url string) string {
