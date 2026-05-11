@@ -2,107 +2,70 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
-	"net/url"
 	"os"
-	"strconv"
 	"strings"
 )
 
-var inputURL string
-var idorParam string
-var authHeader string
-
-func init() {
-	flag.StringVar(&inputURL, "url", "", "Target URL (optional)")
-	flag.StringVar(&idorParam, "idor_param", "", "ID parameter (e.g. id)")
-	flag.StringVar(&authHeader, "auth_token", "", "Authorization token (e.g. your_token)")
-}
-
-func extractID(fullURL, param string) (int, string) {
-	u, err := url.Parse(fullURL)
-	if err != nil {
-		return 0, ""
-	}
-
-	val := u.Query().Get(param)
-	if val == "" {
-		return 0, ""
-	}
-
-	id, err := strconv.Atoi(val)
-	if err != nil {
-		return 0, ""
-	}
-
-	return id, param
-}
-
 func main() {
 
-	flag.Parse()
+	filename := "API.json" //filename from local
 
-	var baseURL string
+	url, paths := getURLandPATH(filename)
 
-	if inputURL != "" {
-		baseURL = strings.TrimSpace(inputURL)
-	} else {
-		reader := bufio.NewReader(os.Stdin)
-		fmt.Print("Enter target URL: ")
-		input, _ := reader.ReadString('\n')
-		baseURL = strings.TrimSpace(input)
+	// printing url and paths
+	println(url)
+	for _, path := range paths {
+		println(path)
 	}
 
-	fmt.Println("[+] Base URL:", baseURL)
+	resp := testLogin_is_JWT(url, paths)
+	println(resp)
+	//testJWT(url, paths)
 
-	fmt.Println("[*] Discovering endpoints...")
-	endpoints := discoverEndpoints(baseURL)
+}
 
-	file, _ := os.Create("endpoints.txt")
+func getURLandPATH(filename string) (string, []string) {
+
+	file, err := os.Open(filename)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return "", []string{}
+	}
+
 	defer file.Close()
+	var url string
+	var paths []string
 
-	var results []Result
+	scanner := bufio.NewScanner(file)
 
-	for _, ep := range endpoints {
+	for scanner.Scan() {
 
-		ep = strings.ReplaceAll(ep, "\n", "")
-		ep = strings.ReplaceAll(ep, "\r", "")
-		ep = strings.TrimSpace(ep)
+		line := strings.TrimSpace(scanner.Text())
+		//println("line : ", line)
+		// Condition 1
 
-		if ep == "" {
-			continue
+		if strings.Contains(line, "/") && !strings.Contains(line, "//") {
+
+			if strings.Contains(line, "json") {
+				continue
+			}
+			path := line[1 : len(line)-4]
+			paths = append(paths, path)
 		}
 
-		// Ensure leading slash
-		if !strings.HasPrefix(ep, "/") {
-			ep = "/" + ep
-		}
+		if strings.Contains(line, `"url": "`) {
 
-		fullURL := strings.TrimRight(baseURL, "/") + ep
+			start := strings.Index(line, `" "url": "`) + len(`" "url": "`)
+			end := strings.Index(line[start:], `"`)
 
-		fmt.Println("[+] Testing:", fullURL)
+			url = line[start-1 : start+end]
 
-		file.WriteString(fullURL + "\n")
-
-		i, err := strconv.Atoi(idorParam)
-		if err != nil {
-			i = 0
-		}
-		if res := testIDOR(fullURL, i, authHeader); res != "" {
-			results = append(results, Result{fullURL, res})
-		}
-		if res := testAuth(fullURL); res != "" {
-			results = append(results, Result{fullURL, res})
-		}
-		if res := testRateLimit(fullURL); res != "" {
-			results = append(results, Result{fullURL, res})
 		}
 	}
+	if url == "http://localhost" || url == "https://localhost" {
 
-	fmt.Println("[*] Running Nuclei...")
-	// runNuclei("endpoints.txt")
-
-	saveReport(results)
-	fmt.Println("[+] Report saved to report.json")
+		return url + ":8888", paths
+	}
+	return url, paths
 }

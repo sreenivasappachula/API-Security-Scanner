@@ -12,3 +12,4 @@ v2/community/posts
 /api/v1/orders
 /orders?order_id=
 /workshop/api/shop/orders
+/login
