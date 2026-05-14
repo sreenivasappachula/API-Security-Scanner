@@ -8,6 +8,7 @@ import (
 type Result struct {
 	Endpoint string `json:"endpoint"`
 	Issue    string `json:"issue"`
+	Token    string `json:"token,omitempty"`
 }
 
 func saveReport(results []Result) {

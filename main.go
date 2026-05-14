@@ -19,9 +19,29 @@ func main() {
 		println(path)
 	}
 
-	resp := testLogin_is_JWT(url, paths)
-	println(resp)
-	//testJWT(url, paths)
+	url, credentials := testLogin_is_JWT(url, paths)
+
+	if url == "" {
+		println(" No login is detected.....! ")
+		os.Exit(3)
+	}
+
+	fmt.Println("login url and crendtails{ email: ", credentials.email, ", password :", credentials.password, "}")
+	issues, err := testJWT(url, paths, credentials)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
+
+	// write the issues to report.json
+	//var results []Result
+
+	if len(issues) > 0 {
+		fmt.Println("Found Issues:")
+		for endpoint, issue := range issues {
+			fmt.Println("- Endpoint:", endpoint)
+			fmt.Println("  Issue:", issue)
+		}
+	}
 
 }
 
