@@ -98,7 +98,7 @@ func testLogin_is_JWT(url string, paths []string) (string, User) {
 // if response is 200 ok then
 //check for authroization token exists or not
 
-func testJWT(endpointURL string, paths []string, credentials User) (map[string]string, error) {
+func testJWT(endpointURL string, paths []string, credentials User) ([]string, error) {
 	var responseData JSON
 	jsonData, err := json.Marshal(credentials.GetJSON())
 	if err != nil {
@@ -159,20 +159,22 @@ func testJWT(endpointURL string, paths []string, credentials User) (map[string]s
 			fmt.Println("Error testing JWT None Algorithm:", err)
 			fmt.Println("Error testing JWT Confusion Attack:", err1)
 		}
+		for _, issue := range foundIssues {
+			fmt.Println(issue)
+		}
+		fmt.Println("------------------------------------")
 		//merge the found issues from both tests
-		for k, v := range foundconfustionIssues {
-			foundIssues[k] = v
+		for _, issue := range foundconfustionIssues {
+			foundIssues = append(foundIssues, issue)
 		}
-		if len(foundIssues) > 0 {
-			return foundIssues, nil
-		}
+		return foundIssues, nil
 	}
 	return nil, nil
 }
 
-func JWT_confusion_attack(url_org string, paths []string, token string, bearerType string) (map[string]string, error) {
+func JWT_confusion_attack(url_org string, paths []string, token string, bearerType string) ([]string, error) {
 	// find the jwk.json or .well-known/jwks.json
-	foundIssues := make(map[string]string)
+	foundIssues := []string{}
 	found, KEY := findJWKSetEndpointAndReturnPEMKey(url_org)
 	fmt.Println("found JWK Set endpoint : ", found, " RSA Key: ", KEY)
 	if found {
@@ -241,9 +243,9 @@ func JWT_confusion_attack(url_org string, paths []string, token string, bearerTy
 
 				if resp.StatusCode == 200 {
 					// print the token and decoded header and payload for debugging
-					foundIssues["Endpoint"] = fullURL
-					foundIssues["Issue"] = "Possible JWT Confusion Vulnerability, method: " + method
-					foundIssues["Token"] = forgedToken
+					foundIssues = append(foundIssues, "Possible JWT Confusion Attack Vulnerability")
+					foundIssues = append(foundIssues, fullURL+"  method: "+method)
+					foundIssues = append(foundIssues, forgedToken)
 					return foundIssues, nil
 				}
 			}
@@ -336,9 +338,9 @@ func findJWKSetEndpointAndReturnPEMKey(url_org string) (bool, string) {
 	return false, ""
 }
 
-func JWT_algo_none(url_org string, paths []string, token string, bearerType string) (map[string]string, error) {
+func JWT_algo_none(url_org string, paths []string, token string, bearerType string) ([]string, error) {
 
-	foundIssues := make(map[string]string)
+	foundIssues := []string{}
 
 	// methods
 	methods := [...]string{"GET", "POST", "PUT", "PATCH", "DELETE"}
@@ -419,9 +421,9 @@ func JWT_algo_none(url_org string, paths []string, token string, bearerType stri
 				//body, _ := io.ReadAll(resp.Body)
 				//fmt.Println(" JWT request",method, path, " response code : ", resp.StatusCode)
 				if resp.StatusCode == 200 {
-					foundIssues["Endpoint"] = fullURL
-					foundIssues["Issue"] = "Possible JWT None Algorithm Vulnerability, method: " + method + " used keyword : " + keyword
-					foundIssues["Token"] = modifiedToken
+					foundIssues = append(foundIssues, "Possible JWT None Algorithm Vulnerability")
+					foundIssues = append(foundIssues, fullURL+" , method: "+method+" used keyword : "+keyword)
+					foundIssues = append(foundIssues, modifiedToken)
 				}
 			}
 

@@ -6,8 +6,8 @@ import (
 )
 
 type Result struct {
-	Endpoint string `json:"endpoint"`
 	Issue    string `json:"issue"`
+	Endpoint string `json:"endpoint"`
 	Token    string `json:"token,omitempty"`
 }
 

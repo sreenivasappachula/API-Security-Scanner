@@ -33,15 +33,20 @@ func main() {
 	}
 
 	// write the issues to report.json
-	//var results []Result
+	var results []Result
 
 	if len(issues) > 0 {
 		fmt.Println("Found Issues:")
-		for endpoint, issue := range issues {
-			fmt.Println("- Endpoint:", endpoint)
-			fmt.Println("  Issue:", issue)
+		//get the isssue length print the issue and the endpoint, and the token
+		fmt.Printf("Length : %d\n", len(issues))
+		for iterator := 0; iterator < len(issues); iterator++ {
+			results = append(results, Result{Issue: issues[iterator], Endpoint: issues[iterator+1], Token: issues[iterator+2]})
+			iterator = iterator + 2
 		}
 	}
+	saveReport(results)
+	//pass the Paths and check for cves from nuclei
+	runNuclei(url, paths, results)
 
 }
 
