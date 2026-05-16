@@ -1,0 +1,82 @@
+[
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/ , method: GET used keyword : ",
+        "token": "eyJhbGciOiIifQ.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/ , method: GET used keyword : nONE",
+        "token": "eyJhbGciOiJuT05FIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/ , method: GET used keyword : None",
+        "token": "eyJhbGciOiJOb25lIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/ , method: GET used keyword : NoNE",
+        "token": "eyJhbGciOiJOb05FIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/ , method: GET used keyword : NONE",
+        "token": "eyJhbGciOiJOT05FIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/ , method: GET used keyword : nOnE",
+        "token": "eyJhbGciOiJuT25FIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/ , method: GET used keyword : NoNe",
+        "token": "eyJhbGciOiJOb05lIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/ , method: GET used keyword : none",
+        "token": "eyJhbGciOiJub25lIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/identity/api/v2/user/dashboard , method: GET used keyword : ",
+        "token": "eyJhbGciOiIifQ.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/identity/api/v2/user/dashboard , method: GET used keyword : nONE",
+        "token": "eyJhbGciOiJuT05FIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/identity/api/v2/user/dashboard , method: GET used keyword : None",
+        "token": "eyJhbGciOiJOb25lIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/identity/api/v2/user/dashboard , method: GET used keyword : NoNE",
+        "token": "eyJhbGciOiJOb05FIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/identity/api/v2/user/dashboard , method: GET used keyword : NONE",
+        "token": "eyJhbGciOiJOT05FIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/identity/api/v2/user/dashboard , method: GET used keyword : nOnE",
+        "token": "eyJhbGciOiJuT25FIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT None Algorithm Vulnerability",
+        "endpoint": "http://localhost:8888/identity/api/v2/user/dashboard , method: GET used keyword : NoNe",
+        "token": "eyJhbGciOiJOb05lIn0.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTc3ODk1NjA4NSwiZXhwIjoxNzc5NTYwODg1LCJyb2xlIjoidXNlciJ9.KH3JHWhzN5sJ7TzSDDeRbEx2o7cINw8FzICdhDY9bP9ghRFJW8slLskM5_onMjMwT2k2Tf-eKCkS3vnYeCgNLHFRxps9MBBMjOk3-pxYtSGZG_YOFQ6rd4soqJ7YUZd2s_thA20q9pvDgW-SWgP4fCiAkGOkR3d5oMx1QN2Vdn0usDaW6eKOFGjZNQfV1BKjQ8Fh0SO4LxT4Fn2MKY0KHxfmw_gM46nVLldAyt-6oWlRklNVD6BB_-OSdInA-7xHj-dbgDlXYPtfZPeQ_tJXjUcWElV_HKi7ZAj--3RsCoMdcl9Z_R_sAln6pyXj2hkdMRmVK2dp5ekGH5eJFLC81Q"
+    },
+    {
+        "issue": "Possible JWT Confusion Attack Vulnerability",
+        "endpoint": "http://localhost:8888/  method: GET",
+        "token": "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3Nzk1NjA4ODUsImlhdCI6MTc3ODk1NjA4NSwicm9sZSI6InVzZXIiLCJzdWIiOiJhZG1pbiJ9.oOw5yWDTjFt0FOR9H3VmQ0m1QRHhDWYGBthw2iZDUdM"
+    }
+]

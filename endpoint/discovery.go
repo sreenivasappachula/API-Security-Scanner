@@ -2,10 +2,14 @@ package endpoint
 
 import (
 	"bufio"
+	"encoding/json"
 	"io"
+	"net"
 	"net/http"
+	neturl "net/url"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 )
 
@@ -94,45 +98,49 @@ func DiscoverEndpoints(baseURL string) []string {
 	return endpoints
 }
 
-func ParseURLAndPaths(filename string) (string, []string) {
+func ParseURLAndPaths(filename string) (string, []string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		return "", []string{}
+		return "", nil, err
 	}
-
 	defer file.Close()
-	var url string
-	var paths []string
 
-	scanner := bufio.NewScanner(file)
+	type server struct {
+		URL string `json:"url"`
+	}
 
-	for scanner.Scan() {
+	type apiSpec struct {
+		Servers []server               `json:"servers"`
+		Paths   map[string]interface{} `json:"paths"`
+	}
 
-		line := strings.TrimSpace(scanner.Text())
-		//println("line : ", line)
-		// Condition 1
+	var spec apiSpec
+	decoder := json.NewDecoder(file)
+	if err := decoder.Decode(&spec); err != nil {
+		return "", nil, err
+	}
 
-		if strings.Contains(line, "/") && !strings.Contains(line, "//") {
-
-			if strings.Contains(line, "json") {
-				continue
-			}
-			path := line[1 : len(line)-4]
-			paths = append(paths, path)
-		}
-
-		if strings.Contains(line, `"url": "`) {
-
-			start := strings.Index(line, `" "url": "`) + len(`" "url": "`)
-			end := strings.Index(line[start:], `"`)
-
-			url = line[start-1 : start+end]
-
+	url := ""
+	if len(spec.Servers) > 0 {
+		url = strings.TrimSpace(spec.Servers[0].URL)
+		parsed, err := neturl.Parse(url)
+		if err == nil && parsed.Hostname() == "localhost" && parsed.Port() == "" {
+			parsed.Host = net.JoinHostPort(parsed.Hostname(), "8888")
+			url = parsed.String()
 		}
 	}
-	if url == "http://localhost" || url == "https://localhost" {
 
-		return url + ":8888", paths
+	paths := make([]string, 0, len(spec.Paths))
+	for p := range spec.Paths {
+		if p == "" {
+			continue
+		}
+		if !strings.HasPrefix(p, "/") {
+			p = "/" + p
+		}
+		paths = append(paths, p)
 	}
-	return url, paths
+	sort.Strings(paths)
+
+	return url, paths, nil
 }

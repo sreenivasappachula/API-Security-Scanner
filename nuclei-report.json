@@ -1,0 +1,9 @@
+[http-missing-security-headers:referrer-policy] [http] [info] http://127.0.0.1:8888/identity/api/v2/vehicle/vehicles
+[http-missing-security-headers:clear-site-data] [http] [info] http://127.0.0.1:8888/identity/api/v2/vehicle/vehicles
+[http-missing-security-headers:cross-origin-embedder-policy] [http] [info] http://127.0.0.1:8888/identity/api/v2/vehicle/vehicles
+[http-missing-security-headers:cross-origin-opener-policy] [http] [info] http://127.0.0.1:8888/identity/api/v2/vehicle/vehicles
+[http-missing-security-headers:cross-origin-resource-policy] [http] [info] http://127.0.0.1:8888/identity/api/v2/vehicle/vehicles
+[http-missing-security-headers:content-security-policy] [http] [info] http://127.0.0.1:8888/identity/api/v2/vehicle/vehicles
+[http-missing-security-headers:permissions-policy] [http] [info] http://127.0.0.1:8888/identity/api/v2/vehicle/vehicles
+[http-missing-security-headers:x-permitted-cross-domain-policies] [http] [info] http://127.0.0.1:8888/identity/api/v2/vehicle/vehicles
+[openresty-detect] [http] [info] http://127.0.0.1:8888/identity/api/v2/vehicle/vehicles ["openresty/1.27.1.2"]
